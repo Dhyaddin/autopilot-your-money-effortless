@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/prototype";
 import { Card, Button, Input, Badge, ProgressBar, Avatar, ScreenHeader } from "./ui";
 import { BottomNav } from "./BottomNav";
+import { GxLogo } from "./GxLogo";
 import {
   Bell, Eye, EyeOff, Check, ChevronRight, Filter, Search, X, Zap, Wifi,
-  Camera, Copy, ArrowUp, AlertTriangle, ShoppingBag, Utensils, Briefcase,
+  Camera, Copy, ArrowUp, ArrowDownLeft, ArrowUpRight, AlertTriangle, ShoppingBag, Utensils, Briefcase,
   Film, Coffee, Car, PiggyBank, Plane, Shield, Sparkles, Plus, Lock,
   Smartphone, ScanFace, Mail, ArrowLeft, Trophy, Users, Send, MessageCircle, Instagram, Link2, Ghost, RefreshCw, Edit3, ChevronDown,
+  QrCode, CreditCard, Wallet, TrendingUp, Gift,
 } from "lucide-react";
 
 /* SPLASH */
@@ -14,13 +16,14 @@ export function Splash() {
   const { go } = usePrototype();
   useEffect(() => { const t = setTimeout(() => go("onb1"), 2500); return () => clearTimeout(t); }, [go]);
   return (
-    <div className="h-full flex flex-col items-center justify-center bg-background relative">
-      <div className="text-center">
-        <h1 className="font-display text-[32px] font-extrabold" style={{ color: "#3B82F6" }}>AutoPilot</h1>
-        <p className="mt-3 text-sm font-semibold" style={{ color: "#F59E0B" }}>Don't Think. AutoPilot.</p>
-        <p className="mt-1 text-xs text-muted-foreground">by GXBank</p>
+    <div className="h-full flex flex-col items-center justify-center bg-app relative">
+      <div className="text-center flex flex-col items-center">
+        <GxLogo size={72} />
+        <h1 className="font-display text-[36px] font-extrabold mt-5 text-brand-gradient">AutoPilot</h1>
+        <p className="mt-2 text-sm font-semibold text-foreground/80">Don't Think. AutoPilot.</p>
+        <p className="mt-1 text-xs text-muted-foreground">by GX Bank</p>
       </div>
-      <div className="absolute bottom-24 w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <div className="absolute bottom-24 w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#EC4899", borderTopColor: "transparent" }} />
     </div>
   );
 }
