@@ -1,26 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
+import PrototypeApp from "@/components/proto/App";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "AutoPilot by GXBank — AI-Powered Finance for Malaysian Youth" },
+      { name: "description", content: "AutoPilot by GXBank: AI-driven smart buckets, savings streaks, goal lock and future vision for Malaysian youth aged 18–25." },
+    ],
+  }),
+  component: PrototypeApp,
 });
-
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
-}
