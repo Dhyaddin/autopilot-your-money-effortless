@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { usePrototype } from "@/lib/prototype";
 import { Card, Button, Input, Badge, ProgressBar, Avatar, ScreenHeader } from "./ui";
 import { BottomNav } from "./BottomNav";
+import { GxLogo } from "./GxLogo";
 import {
   Bell, Eye, EyeOff, Check, ChevronRight, Filter, Search, X, Zap, Wifi,
-  Camera, Copy, ArrowUp, AlertTriangle, ShoppingBag, Utensils, Briefcase,
+  Camera, Copy, ArrowUp, ArrowDownLeft, ArrowUpRight, AlertTriangle, ShoppingBag, Utensils, Briefcase,
   Film, Coffee, Car, PiggyBank, Plane, Shield, Sparkles, Plus, Lock,
   Smartphone, ScanFace, Mail, ArrowLeft, Trophy, Users, Send, MessageCircle, Instagram, Link2, Ghost, RefreshCw, Edit3, ChevronDown,
+  QrCode, CreditCard, Wallet, TrendingUp, Gift,
 } from "lucide-react";
 
 /* SPLASH */
@@ -14,13 +16,14 @@ export function Splash() {
   const { go } = usePrototype();
   useEffect(() => { const t = setTimeout(() => go("onb1"), 2500); return () => clearTimeout(t); }, [go]);
   return (
-    <div className="h-full flex flex-col items-center justify-center bg-background relative">
-      <div className="text-center">
-        <h1 className="font-display text-[32px] font-extrabold" style={{ color: "#3B82F6" }}>AutoPilot</h1>
-        <p className="mt-3 text-sm font-semibold" style={{ color: "#F59E0B" }}>Don't Think. AutoPilot.</p>
-        <p className="mt-1 text-xs text-muted-foreground">by GXBank</p>
+    <div className="h-full flex flex-col items-center justify-center bg-app relative">
+      <div className="text-center flex flex-col items-center">
+        <GxLogo size={72} />
+        <h1 className="font-display text-[36px] font-extrabold mt-5 text-brand-gradient">AutoPilot</h1>
+        <p className="mt-2 text-sm font-semibold text-foreground/80">Don't Think. AutoPilot.</p>
+        <p className="mt-1 text-xs text-muted-foreground">by GX Bank</p>
       </div>
-      <div className="absolute bottom-24 w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+      <div className="absolute bottom-24 w-8 h-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: "#EC4899", borderTopColor: "transparent" }} />
     </div>
   );
 }
@@ -239,82 +242,130 @@ export function Forgot() {
 export function Dashboard() {
   const { go } = usePrototype();
   const [nudge, setNudge] = useState(true);
+  const [hide, setHide] = useState(false);
   return (
-    <div className="h-full bg-background overflow-y-auto no-scrollbar pb-24">
+    <div className="h-full bg-app overflow-y-auto no-scrollbar pb-28">
       <div className="px-4 pt-12">
         <div className="flex items-center justify-between mb-5">
-          <div>
-            <p className="text-sm text-muted-foreground">Good morning,</p>
-            <p className="font-display text-lg">Amir 👋</p>
+          <div className="flex items-center gap-2.5">
+            <GxLogo size={36} />
+            <div>
+              <p className="text-[11px] text-muted-foreground leading-none">GX Bank</p>
+              <p className="font-display text-[15px] leading-tight">Hi, Amir 👋</p>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => go("notifications")} className="relative w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center">
-              <Bell size={18} />
-              <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-danger text-white text-[10px] font-bold flex items-center justify-center">3</span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => go("notifications")} className="relative w-10 h-10 rounded-full glass flex items-center justify-center">
+              <Bell size={17} />
+              <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full text-white text-[9px] font-bold flex items-center justify-center" style={{ background: "#EC4899" }}>3</span>
             </button>
-            <button onClick={() => go("profile")}><Avatar initials="AH" size={40} /></button>
+            <button onClick={() => go("profile")}><Avatar initials="AH" color="#EC4899" size={40} /></button>
           </div>
         </div>
 
-        <Card accent="#3B82F6" className="relative overflow-hidden" >
-          <div className="absolute inset-0 opacity-30" style={{ background: "radial-gradient(circle at top right, #3B82F6, transparent 60%)" }} />
+        <div className="relative rounded-3xl p-5 overflow-hidden text-white shadow-[0_18px_40px_-12px_rgba(139,92,246,0.55)]"
+             style={{ background: "var(--gradient-card)" }}>
+          <div className="absolute -top-12 -right-12 w-44 h-44 rounded-full" style={{ background: "radial-gradient(circle, rgba(236,72,153,0.55), transparent 65%)" }} />
+          <div className="absolute -bottom-16 -left-10 w-44 h-44 rounded-full" style={{ background: "radial-gradient(circle, rgba(139,92,246,0.45), transparent 65%)" }} />
           <div className="relative">
-            <p className="text-xs text-muted-foreground">Total Balance</p>
-            <p className="font-display text-[34px] mt-1">RM 3,842.50</p>
-            <p className="text-xs text-success font-semibold mt-1 flex items-center gap-1"><ArrowUp size={12} /> +RM 250 this month</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <GxLogo size={26} />
+                <span className="text-[11px] font-semibold tracking-widest opacity-80">GX BANK</span>
+              </div>
+              <span className="text-[10px] font-bold tracking-wider opacity-70">DEBIT • VISA</span>
+            </div>
+            <p className="text-[11px] mt-5 opacity-70">Available Balance</p>
+            <div className="flex items-center gap-2 mt-1">
+              <p className="font-display text-[32px] tracking-tight">{hide ? "RM ••••••" : "RM 3,842.50"}</p>
+              <button onClick={() => setHide(!hide)} className="opacity-70">{hide ? <Eye size={16} /> : <EyeOff size={16} />}</button>
+            </div>
+            <div className="flex items-end justify-between mt-4">
+              <div>
+                <p className="text-[10px] opacity-60 tracking-widest">CARD NUMBER</p>
+                <p className="text-[13px] font-mono mt-0.5">•••• •••• •••• 4823</p>
+              </div>
+              <p className="text-[11px] font-semibold flex items-center gap-1" style={{ color: "#34D399" }}>
+                <ArrowUp size={11} /> +RM 250 this month
+              </p>
+            </div>
           </div>
-        </Card>
+        </div>
+
+        <div className="grid grid-cols-4 gap-2 mt-4">
+          {[
+            { i: QrCode, l: "DuitNow QR", c: "#EC4899" },
+            { i: Send, l: "Transfer", c: "#8B5CF6" },
+            { i: Wallet, l: "Top-up", c: "#22D3EE" },
+            { i: Users, l: "Split Bill", c: "#FBBF24" },
+          ].map(({ i: Ic, l, c }) => (
+            <button key={l} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl card-elevated">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${c}22`, color: c }}><Ic size={18} /></div>
+              <span className="text-[10px] font-semibold text-foreground/80">{l}</span>
+            </button>
+          ))}
+        </div>
 
         {nudge && (
-          <Card accent="#3B82F6" className="mt-3 relative">
+          <div className="mt-3 relative rounded-2xl p-4" style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.18), rgba(236,72,153,0.18))", border: "1px solid rgba(236,72,153,0.25)" }}>
             <button onClick={() => setNudge(false)} className="absolute top-3 right-3 text-muted-foreground"><X size={16} /></button>
-            <p className="text-[11px] font-bold uppercase tracking-wider text-primary flex items-center gap-1.5"><Zap size={12} /> AI Nudge</p>
-            <p className="text-sm mt-1.5 leading-snug">You've spent 83% of your Wants budget. 6 days before salary — pause Shopee orders.</p>
-          </Card>
+            <p className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-brand-gradient"><Sparkles size={12} color="#EC4899" /> AutoPilot AI</p>
+            <p className="text-sm mt-1.5 leading-snug">You've spent 83% of your Wants budget. 6 days till payday — pause Shopee orders ya 👀</p>
+          </div>
         )}
 
-        <Card className="mt-3">
+        <div className="card-elevated rounded-2xl p-4 mt-3">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-display text-base">Smart Buckets</h3>
-            <button onClick={() => go("buckets")} className="text-primary text-xs font-semibold">View All →</button>
+            <button onClick={() => go("buckets")} className="text-[11px] font-semibold text-brand-gradient">View All →</button>
+          </div>
+          <div className="flex h-2.5 rounded-full overflow-hidden mb-3">
+            <div style={{ width: "60%", background: "#8B5CF6" }} />
+            <div style={{ width: "20%", background: "#FBBF24" }} />
+            <div style={{ width: "20%", background: "#34D399" }} />
           </div>
           <div className="space-y-2.5">
             {[
-              { c: "#3B82F6", n: "Needs", v: "RM 2,305" },
-              { c: "#F59E0B", n: "Wants", v: "RM 654", warn: true },
-              { c: "#10B981", n: "Savings", v: "RM 882" },
+              { c: "#8B5CF6", n: "Needs", v: "RM 2,305" },
+              { c: "#FBBF24", n: "Wants", v: "RM 654", warn: true },
+              { c: "#34D399", n: "Savings", v: "RM 882" },
             ].map((b) => (
               <div key={b.n} className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: b.c }} />
                   <span className="text-sm">{b.n}</span>
-                  {b.warn && <Badge tone="amber">⚠ Warning</Badge>}
+                  {b.warn && <Badge tone="amber">⚠ 83%</Badge>}
                 </div>
                 <span className="text-sm font-semibold">{b.v}</span>
               </div>
             ))}
           </div>
-        </Card>
+        </div>
 
-        <Card className="mt-3">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display text-base">Savings Streak</h3>
-          </div>
-          <div className="flex gap-1.5 mb-2.5">
-            {[0,1,2,3,4,5].map(i => <div key={i} className="flex-1 h-7 rounded-md" style={{ background: "#10B981" }} />)}
-            <div className="flex-1 h-7 rounded-md pulse-soft" style={{ background: "#F59E0B" }} />
-          </div>
-          <p className="text-xs font-bold text-success">🔥 7-day streak! Keep going.</p>
-        </Card>
+        <div className="grid grid-cols-2 gap-3 mt-3">
+          <button onClick={() => go("goals")} className="card-elevated rounded-2xl p-4 text-left">
+            <div className="flex items-center gap-2"><TrendingUp size={14} color="#34D399" /><span className="text-[11px] font-bold uppercase text-muted-foreground tracking-wider">Goal</span></div>
+            <p className="font-display text-base mt-2">Japan Trip ✈</p>
+            <div className="mt-2"><ProgressBar value={70} color="#EC4899" /></div>
+            <p className="text-[11px] text-muted-foreground mt-1.5">RM 4,200 / 6,000 · 70%</p>
+          </button>
+          <button onClick={() => go("streaks")} className="card-elevated rounded-2xl p-4 text-left">
+            <div className="flex items-center gap-2"><Sparkles size={14} color="#FBBF24" /><span className="text-[11px] font-bold uppercase text-muted-foreground tracking-wider">Streak</span></div>
+            <p className="font-display text-base mt-2">🔥 13 days</p>
+            <p className="text-[11px] text-muted-foreground mt-3">Top 23% of savers</p>
+            <p className="text-[11px] mt-1 font-semibold" style={{ color: "#34D399" }}>+RM 5 cashback ready</p>
+          </button>
+        </div>
 
-        <Card className="mt-3">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display text-base">Recent</h3>
-            <button onClick={() => go("transactions")} className="text-primary text-xs font-semibold">See All →</button>
+        <div className="card-elevated rounded-2xl p-4 mt-3">
+          <div className="flex items-center justify-between mb-1">
+            <h3 className="font-display text-base">Recent Activity</h3>
+            <button onClick={() => go("transactions")} className="text-[11px] font-semibold text-brand-gradient">See All →</button>
           </div>
-          <TxRow icon={<Utensils size={16} />} color="#F59E0B" name="GrabFood" cat="Food & Drink" amt="-RM 24.50" neg onClick={() => go("txDetail")} />
-          <TxRow icon={<Briefcase size={16} />} color="#10B981" name="Salary Received" cat="Income" amt="+RM 3,800.00" />
-        </Card>
+          <TxRow icon={<Utensils size={16} />} color="#FBBF24" name="GrabFood" cat="Food & Drink · 7:43 PM" amt="-RM 24.50" neg onClick={() => go("txDetail")} />
+          <TxRow icon={<Briefcase size={16} />} color="#34D399" name="Salary Received" cat="Today" amt="+RM 3,800.00" />
+          <TxRow icon={<ShoppingBag size={16} />} color="#EC4899" name="Shopee" cat="Shopping · Yesterday" amt="-RM 89.00" neg last />
+        </div>
       </div>
       <BottomNav />
     </div>
