@@ -12,19 +12,19 @@ const items: { id: ScreenId; icon: any; label: string }[] = [
 export function BottomNav() {
   const { screen, go } = usePrototype();
   return (
-    <div className="absolute bottom-0 left-0 right-0 px-3 pb-3 pt-2" style={{ background: "linear-gradient(to top, #0A0D14 70%, transparent)" }}>
-      <div className="flex items-center justify-around bg-card border border-border rounded-full px-2 py-2">
+    <div className="absolute bottom-0 left-0 right-0 px-3 pb-3 pt-3" style={{ background: "linear-gradient(to top, #0B0B17 75%, transparent)" }}>
+      <div className="flex items-center justify-around glass rounded-2xl px-2 py-2">
         {items.map(({ id, icon: Icon, label }) => {
           const active = screen === id;
           return (
             <button
               key={id}
               onClick={() => go(id)}
-              className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-full transition"
-              style={active ? { background: "rgba(59,130,246,0.15)" } : undefined}
+              className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition"
+              style={active ? { background: "linear-gradient(135deg, rgba(139,92,246,0.25), rgba(236,72,153,0.25))" } : undefined}
             >
-              <Icon size={20} color={active ? "#3B82F6" : "#6B7FA3"} fill={active ? "#3B82F6" : "transparent"} strokeWidth={active ? 2 : 1.8} />
-              <span className="text-[10px] font-semibold" style={{ color: active ? "#3B82F6" : "#6B7FA3" }}>{label}</span>
+              <Icon size={20} color={active ? "#EC4899" : "#8A8AAE"} strokeWidth={active ? 2.4 : 1.8} />
+              <span className="text-[10px] font-semibold" style={{ color: active ? "#F4F4F8" : "#8A8AAE" }}>{label}</span>
             </button>
           );
         })}
