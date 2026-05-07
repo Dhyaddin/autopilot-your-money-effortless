@@ -1,8 +1,9 @@
+import * as React from "react";
 import { PrototypeProvider, usePrototype } from "@/lib/prototype";
 import * as S from "@/components/proto/screens";
 import { Overlays } from "@/components/proto/Overlays";
 
-const map: Record<string, () => JSX.Element> = {
+const map: Record<string, () => React.ReactElement> = {
   splash: S.Splash, onb1: S.Onb1, onb2: S.Onb2, onb3: S.Onb3, onb4: S.Onb4,
   signup: S.SignUp, login: S.Login, otp: S.OTP, biometric: S.Biometric, forgot: S.Forgot,
   dashboard: S.Dashboard, notifications: S.Notifications, buckets: S.Buckets,
