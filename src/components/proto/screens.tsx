@@ -294,17 +294,19 @@ export function Dashboard() {
 
         <div className="grid grid-cols-4 gap-2 mt-4">
           {[
-            { i: QrCode, l: "DuitNow QR", c: "#EC4899" },
-            { i: Send, l: "Transfer", c: "#8B5CF6" },
-            { i: Wallet, l: "Top-up", c: "#22D3EE" },
-            { i: Users, l: "Split Bill", c: "#FBBF24" },
-          ].map(({ i: Ic, l, c }) => (
-            <button key={l} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl card-elevated">
+            { i: QrCode, l: "DuitNow QR", c: "#EC4899", to: "dashboard" as const },
+            { i: Send, l: "Transfer", c: "#8B5CF6", to: "dashboard" as const },
+            { i: ShieldIcon, l: "Guardian", c: "#22D3EE", to: "guardian" as const },
+            { i: Wallet, l: "Liabilities", c: "#FBBF24", to: "liabilities" as const },
+          ].map(({ i: Ic, l, c, to }) => (
+            <button key={l} onClick={() => go(to)} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl card-elevated">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${c}22`, color: c }}><Ic size={18} /></div>
               <span className="text-[10px] font-semibold text-foreground/80">{l}</span>
             </button>
           ))}
         </div>
+
+        <GuardianStatusCard onOpen={() => go("guardian")} />
 
         {nudge && (
           <div className="mt-3 relative rounded-2xl p-4" style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.18), rgba(236,72,153,0.18))", border: "1px solid rgba(236,72,153,0.25)" }}>
