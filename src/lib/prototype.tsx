@@ -6,9 +6,10 @@ export type ScreenId =
   | "dashboard" | "notifications" | "buckets" | "transactions" | "txDetail"
   | "goals" | "goalDetail" | "createGoal" | "autoBoost"
   | "streaks" | "leaderboard" | "ai" | "profile" | "referral"
+  | "guardian" | "hardBlock" | "liabilities" | "widget" | "needWant"
   | "empty" | "noConnection";
 
-export type Overlay = "success" | "deleteConfirm" | "logout" | "splitEdit" | "addExtra" | null;
+export type Overlay = "success" | "deleteConfirm" | "logout" | "splitEdit" | "addExtra" | "debtCheck" | null;
 
 interface Ctx {
   screen: ScreenId;

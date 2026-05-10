@@ -1,6 +1,6 @@
 import { usePrototype } from "@/lib/prototype";
 import { Button } from "./ui";
-import { Check, AlertTriangle, LogOut } from "lucide-react";
+import { Check, AlertTriangle, LogOut, Ban, Shield } from "lucide-react";
 
 export function Overlays() {
   const { overlay, setOverlay, go } = usePrototype();
@@ -66,6 +66,25 @@ export function Overlays() {
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Button variant="muted" onClick={close}>Cancel</Button>
               <Button onClick={close}>Add</Button>
+            </div>
+          </>
+        )}
+        {overlay === "debtCheck" && (
+          <>
+            <div className="w-16 h-16 rounded-full mx-auto flex items-center justify-center" style={{ background: "rgba(251,191,36,0.18)", border: "2px solid #FBBF24" }}>
+              <Shield size={28} color="#FBBF24" />
+            </div>
+            <h3 className="font-display text-lg text-center mt-4">Debt Reality Check</h3>
+            <p className="text-sm text-muted-foreground text-center mt-1">Before you tap pay — here's the full picture.</p>
+            <div className="mt-4 rounded-xl p-3" style={{ background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.2)" }}>
+              <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total liabilities</span><b style={{ color: "#F87171" }}>RM 13,960</b></div>
+              <div className="flex justify-between text-sm mt-1.5"><span className="text-muted-foreground">Due in 7 days</span><b style={{ color: "#FBBF24" }}>RM 1,560</b></div>
+              <div className="flex justify-between text-sm mt-1.5"><span className="text-muted-foreground">After this payment</span><b>RM 3,553</b></div>
+            </div>
+            <p className="text-[11px] text-center text-muted-foreground mt-3">"Strict but fair." Continue only if essential.</p>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Button variant="muted" onClick={close}>Pause</Button>
+              <Button variant="danger" onClick={close}>Continue anyway</Button>
             </div>
           </>
         )}

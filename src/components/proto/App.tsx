@@ -10,6 +10,7 @@ const map: Record<string, () => React.ReactElement> = {
   transactions: S.Transactions, txDetail: S.TxDetail,
   goals: S.Goals, goalDetail: S.GoalDetail, createGoal: S.CreateGoal, autoBoost: S.AutoBoost,
   streaks: S.Streaks, leaderboard: S.Leaderboard, ai: S.AI, profile: S.Profile, referral: S.Referral,
+  guardian: S.Guardian, hardBlock: S.HardBlock, liabilities: S.Liabilities, widget: S.Widget, needWant: S.NeedWant,
   empty: S.Empty, noConnection: S.NoConnection,
 };
 

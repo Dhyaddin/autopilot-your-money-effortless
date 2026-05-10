@@ -294,17 +294,19 @@ export function Dashboard() {
 
         <div className="grid grid-cols-4 gap-2 mt-4">
           {[
-            { i: QrCode, l: "DuitNow QR", c: "#EC4899" },
-            { i: Send, l: "Transfer", c: "#8B5CF6" },
-            { i: Wallet, l: "Top-up", c: "#22D3EE" },
-            { i: Users, l: "Split Bill", c: "#FBBF24" },
-          ].map(({ i: Ic, l, c }) => (
-            <button key={l} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl card-elevated">
+            { i: QrCode, l: "DuitNow QR", c: "#EC4899", to: "dashboard" as const },
+            { i: Send, l: "Transfer", c: "#8B5CF6", to: "dashboard" as const },
+            { i: ShieldIcon, l: "Guardian", c: "#22D3EE", to: "guardian" as const },
+            { i: Wallet, l: "Liabilities", c: "#FBBF24", to: "liabilities" as const },
+          ].map(({ i: Ic, l, c, to }) => (
+            <button key={l} onClick={() => go(to)} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl card-elevated">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${c}22`, color: c }}><Ic size={18} /></div>
               <span className="text-[10px] font-semibold text-foreground/80">{l}</span>
             </button>
           ))}
         </div>
+
+        <GuardianStatusCard onOpen={() => go("guardian")} />
 
         {nudge && (
           <div className="mt-3 relative rounded-2xl p-4" style={{ background: "linear-gradient(135deg, rgba(139,92,246,0.18), rgba(236,72,153,0.18))", border: "1px solid rgba(236,72,153,0.25)" }}>
@@ -1057,6 +1059,364 @@ export function NoConnection() {
         <Button><RefreshCw size={16} className="inline mr-1" />Try Again</Button>
         <button onClick={back} className="text-sm text-muted-foreground">Go back</button>
       </div>
+    </div>
+  );
+}
+
+/* ============= GUARDIAN — AI Spending Guardrail ============= */
+import { Shield as ShieldIcon, MapPin, Activity, Ban, Heart, Cross, Fuel, Stethoscope, Home as HomeIcon, Lightbulb, ListChecks } from "lucide-react";
+
+const HEALTH_SCORE = 78;
+const SAFE_TO_SPEND = 42;
+
+export function GuardianStatusCard({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button onClick={onOpen} className="w-full text-left mt-3 relative rounded-2xl p-4 overflow-hidden"
+      style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.15), rgba(139,92,246,0.18))", border: "1px solid rgba(34,211,238,0.25)" }}>
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "rgba(34,211,238,0.2)" }}>
+          <ShieldIcon size={16} color="#22D3EE" />
+        </div>
+        <div className="flex-1">
+          <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#22D3EE" }}>AutoPilot Guardian · ACTIVE</p>
+          <p className="text-sm font-semibold mt-0.5">Safe-to-Spend today</p>
+        </div>
+        <ChevronRight size={16} className="text-muted-foreground" />
+      </div>
+      <div className="flex items-end justify-between mt-3">
+        <p className="font-display text-[26px]">RM {SAFE_TO_SPEND}.00</p>
+        <div className="text-right">
+          <p className="text-[10px] text-muted-foreground">Health Score</p>
+          <p className="font-display text-base" style={{ color: "#34D399" }}>{HEALTH_SCORE}/100</p>
+        </div>
+      </div>
+      <div className="mt-2"><ProgressBar value={HEALTH_SCORE} color="#22D3EE" /></div>
+      <p className="text-[11px] text-muted-foreground mt-2">2 essential bills due in 4 days · RM 540 reserved</p>
+    </button>
+  );
+}
+
+/* GUARDIAN HUB */
+export function Guardian() {
+  const { back, go, setOverlay } = usePrototype();
+  const liabilities = [
+    { n: "GXCard Credit", a: "RM 1,240", due: "Due 25 Oct", c: "#F87171" },
+    { n: "Atome BNPL", a: "RM 320", due: "Due 18 Oct", c: "#FBBF24" },
+    { n: "PTPTN Loan", a: "RM 12,400", due: "Monthly RM 180", c: "#A78BFA" },
+  ];
+  return (
+    <div className="h-full bg-app overflow-y-auto no-scrollbar px-4 pt-10 pb-24">
+      <ScreenHeader title="Guardian 🛡" onBack={back} />
+      <p className="text-sm text-muted-foreground -mt-2 mb-4">Strict but fair. Prevents debt before it happens.</p>
+
+      <div className="rounded-3xl p-5 relative overflow-hidden text-white"
+        style={{ background: "linear-gradient(135deg, #0F4C5C 0%, #1A1233 60%, #4A1259 100%)" }}>
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full" style={{ background: "radial-gradient(circle, rgba(34,211,238,0.4), transparent 65%)" }} />
+        <div className="relative">
+          <div className="flex items-center gap-2"><ShieldIcon size={16} color="#22D3EE" /><span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: "#22D3EE" }}>Financial Health</span></div>
+          <div className="flex items-end gap-3 mt-3">
+            <p className="font-display text-[44px] leading-none">{HEALTH_SCORE}</p>
+            <p className="text-xs opacity-70 mb-2">/100 · Good</p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 mt-4">
+            <div><p className="text-[10px] opacity-70">Safe-to-Spend</p><p className="text-sm font-bold">RM {SAFE_TO_SPEND}/day</p></div>
+            <div><p className="text-[10px] opacity-70">Reserved</p><p className="text-sm font-bold">RM 540</p></div>
+            <div><p className="text-[10px] opacity-70">Total Debt</p><p className="text-sm font-bold">RM 13,960</p></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Toggles */}
+      <div className="card-elevated rounded-2xl p-4 mt-3">
+        <h3 className="font-display text-base mb-3">Guardrails</h3>
+        {[
+          { i: Ban, c: "#F87171", t: "Hard-Block Wants when survival at risk", on: true },
+          { i: MapPin, c: "#22D3EE", t: "Location & merchant context analysis", on: true },
+          { i: Activity, c: "#A78BFA", t: "Real-time Need vs Want AI scoring", on: true },
+          { i: AlertTriangle, c: "#FBBF24", t: "Debt Reality Check on RM200+ payments", on: true },
+        ].map(({ i: Ic, c, t, on }) => (
+          <div key={t} className="flex items-center gap-3 py-2.5 border-b border-border last:border-0">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${c}22`, color: c }}><Ic size={16} /></div>
+            <p className="flex-1 text-sm">{t}</p>
+            <div className={`w-10 h-6 rounded-full p-0.5 transition ${on ? "" : "bg-border"}`} style={on ? { background: "var(--gradient-brand)" } : undefined}>
+              <div className={`w-5 h-5 rounded-full bg-white transition ${on ? "translate-x-4" : ""}`} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Unified Liabilities */}
+      <div className="card-elevated rounded-2xl p-4 mt-3">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-display text-base">Unified Liabilities</h3>
+          <button onClick={() => go("liabilities")} className="text-[11px] font-semibold text-brand-gradient">View All →</button>
+        </div>
+        <p className="text-[11px] text-muted-foreground mb-3">BNPL · Credit · Loans — all in one view</p>
+        {liabilities.map((l) => (
+          <div key={l.n} className="flex items-center gap-3 py-2.5 border-b border-border last:border-0">
+            <div className="w-2 h-10 rounded-full" style={{ background: l.c }} />
+            <div className="flex-1">
+              <p className="text-sm font-semibold">{l.n}</p>
+              <p className="text-[11px] text-muted-foreground">{l.due}</p>
+            </div>
+            <p className="text-sm font-bold" style={{ color: l.c }}>{l.a}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Essentials whitelist */}
+      <div className="card-elevated rounded-2xl p-4 mt-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Heart size={14} color="#34D399" />
+          <h3 className="font-display text-base">Emergency Whitelist</h3>
+        </div>
+        <p className="text-[11px] text-muted-foreground mb-3">Always-allow categories. Never blocked.</p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { i: Stethoscope, l: "Hospital" },
+            { i: Cross, l: "Pharmacy" },
+            { i: Fuel, l: "Petrol" },
+            { i: HomeIcon, l: "Rent" },
+            { i: Lightbulb, l: "Utilities" },
+          ].map(({ i: Ic, l }) => (
+            <span key={l} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold"
+              style={{ background: "rgba(52,211,153,0.12)", color: "#34D399" }}>
+              <Ic size={11} /> {l}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mt-3">
+        <button onClick={() => go("widget")} className="card-elevated rounded-2xl p-4 text-left">
+          <Smartphone size={16} color="#22D3EE" />
+          <p className="font-display text-sm mt-2">Home Widget</p>
+          <p className="text-[11px] text-muted-foreground mt-1">Daily limit on lock screen</p>
+        </button>
+        <button onClick={() => go("needWant")} className="card-elevated rounded-2xl p-4 text-left">
+          <Activity size={16} color="#A78BFA" />
+          <p className="font-display text-sm mt-2">Need vs Want Engine</p>
+          <p className="text-[11px] text-muted-foreground mt-1">See live scoring</p>
+        </button>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <Button variant="outlined" onClick={() => setOverlay("debtCheck")}>Demo Debt Check</Button>
+        <Button variant="danger" onClick={() => go("hardBlock")}>Demo Hard Block</Button>
+      </div>
+      <BottomNav />
+    </div>
+  );
+}
+
+/* HARD BLOCK SCREEN */
+export function HardBlock() {
+  const { back, go } = usePrototype();
+  return (
+    <div className="h-full overflow-y-auto no-scrollbar px-5 pt-12 pb-8 flex flex-col"
+      style={{ background: "radial-gradient(800px 400px at 50% 0%, rgba(248,113,113,0.25), transparent 60%), #0B0B17" }}>
+      <ScreenHeader title="" onBack={back} />
+      <div className="flex flex-col items-center text-center mt-6">
+        <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4 pulse-soft"
+          style={{ background: "rgba(248,113,113,0.18)", border: "2px solid #F87171" }}>
+          <Ban size={44} color="#F87171" strokeWidth={2.4} />
+        </div>
+        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "#F87171" }}>Payment Blocked by Guardian</p>
+        <h2 className="font-display text-[26px] mt-2 leading-tight">This purchase puts your<br/>essentials at risk.</h2>
+      </div>
+
+      <div className="card-elevated rounded-2xl p-4 mt-6">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "rgba(236,72,153,0.18)", color: "#EC4899" }}><ShoppingBag size={20} /></div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold">Zara KLCC</p>
+            <p className="text-[11px] text-muted-foreground">Luxury Retail · Detected via GPS</p>
+          </div>
+          <p className="font-display text-lg" style={{ color: "#F87171" }}>RM 289</p>
+        </div>
+      </div>
+
+      <div className="card-elevated rounded-2xl p-4 mt-3">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">AI Reasoning</p>
+        <div className="space-y-2.5 text-sm">
+          <div className="flex items-start gap-2"><span style={{ color: "#F87171" }}>●</span><span>Wants bucket has only <b>RM 114</b> left</span></div>
+          <div className="flex items-start gap-2"><span style={{ color: "#FBBF24" }}>●</span><span>GXCard payment <b>RM 1,240</b> due in 4 days</span></div>
+          <div className="flex items-start gap-2"><span style={{ color: "#A78BFA" }}>●</span><span>Predicted shortfall: <b>RM 175</b> if approved</span></div>
+          <div className="flex items-start gap-2"><span style={{ color: "#34D399" }}>●</span><span>Merchant scored <b>0.18 / 1.0</b> on need-index</span></div>
+        </div>
+      </div>
+
+      <div className="rounded-2xl p-4 mt-3" style={{ background: "rgba(52,211,153,0.08)", border: "1px solid rgba(52,211,153,0.2)" }}>
+        <p className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "#34D399" }}>Suggested instead</p>
+        <p className="text-sm mt-1.5">Add RM 50 to Japan Trip — you'll still hit your goal on time.</p>
+      </div>
+
+      <div className="mt-auto pt-5 space-y-2">
+        <Button onClick={() => go("dashboard")}>Got it, cancel payment</Button>
+        <button className="w-full text-[12px] text-muted-foreground py-2">Override (requires Face ID + 3-min cooldown)</button>
+      </div>
+    </div>
+  );
+}
+
+/* LIABILITIES — full unified debt view */
+export function Liabilities() {
+  const { back, setOverlay } = usePrototype();
+  const items = [
+    { n: "GXCard Credit Card", a: 1240, due: "25 Oct · 4 days", apr: "18% APR", c: "#F87171", t: "CARD" },
+    { n: "Atome — IKEA", a: 320, due: "18 Oct · TODAY", apr: "0% (3/4 paid)", c: "#FBBF24", t: "BNPL" },
+    { n: "Atome — Sephora", a: 180, due: "5 Nov", apr: "0% (1/3 paid)", c: "#FBBF24", t: "BNPL" },
+    { n: "PTPTN Study Loan", a: 12400, due: "Monthly RM 180", apr: "1% APR", c: "#A78BFA", t: "LOAN" },
+    { n: "Maybank Personal Loan", a: 0, due: "Closed Sept", apr: "—", c: "#34D399", t: "PAID" },
+  ];
+  const total = items.reduce((s, i) => s + i.a, 0);
+  return (
+    <div className="h-full bg-app overflow-y-auto no-scrollbar px-4 pt-10 pb-8">
+      <ScreenHeader title="My Liabilities" onBack={back} />
+      <div className="rounded-3xl p-5 text-white relative overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #4A1259 0%, #2A1145 60%, #1A1233 100%)" }}>
+        <p className="text-[11px] uppercase tracking-widest opacity-70">Total Outstanding</p>
+        <p className="font-display text-[32px] mt-1">RM {total.toLocaleString()}</p>
+        <div className="grid grid-cols-3 gap-3 mt-4 text-[11px]">
+          <div><p className="opacity-70">BNPL</p><p className="font-bold text-sm">RM 500</p></div>
+          <div><p className="opacity-70">Credit</p><p className="font-bold text-sm">RM 1,240</p></div>
+          <div><p className="opacity-70">Loans</p><p className="font-bold text-sm">RM 12,400</p></div>
+        </div>
+      </div>
+
+      <div className="card-elevated rounded-2xl p-4 mt-3">
+        <p className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: "#FBBF24" }}>Debt-to-Income · 22%</p>
+        <ProgressBar value={22} color="#FBBF24" />
+        <p className="text-[11px] text-muted-foreground mt-2">Healthy is &lt; 30%. You're in the green zone — keep it tight.</p>
+      </div>
+
+      <div className="space-y-2 mt-3">
+        {items.map((l) => (
+          <div key={l.n} className="card-elevated rounded-2xl p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-md" style={{ background: `${l.c}22`, color: l.c }}>{l.t}</span>
+                <p className="text-sm font-semibold">{l.n}</p>
+              </div>
+              <p className="font-display text-base" style={{ color: l.c }}>RM {l.a.toLocaleString()}</p>
+            </div>
+            <div className="flex justify-between text-[11px] text-muted-foreground mt-2">
+              <span>{l.due}</span><span>{l.apr}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <Button variant="outlined">Link new account</Button>
+        <Button onClick={() => setOverlay("debtCheck")}>Pay smartest first</Button>
+      </div>
+    </div>
+  );
+}
+
+/* NEED vs WANT engine demo */
+export function NeedWant() {
+  const { back } = usePrototype();
+  const cases = [
+    { i: Fuel, c: "#34D399", n: "Petronas Sg.Buloh", cat: "Petrol · Essential", score: 0.96, verdict: "ALLOW", reason: "Whitelisted essential. GPS confirms fuel station." },
+    { i: Stethoscope, c: "#34D399", n: "Klinik Mediviron", cat: "Healthcare · Essential", score: 0.99, verdict: "ALLOW", reason: "Hospital category — never blocked." },
+    { i: Utensils, c: "#FBBF24", n: "GrabFood — McD", cat: "Food · Wants", score: 0.42, verdict: "WARN", reason: "5th food delivery this week. Wants at 85%." },
+    { i: ShoppingBag, c: "#F87171", n: "Zara KLCC", cat: "Apparel · Discretionary", score: 0.18, verdict: "BLOCK", reason: "Wants empty + GXCard due in 4 days." },
+  ];
+  return (
+    <div className="h-full bg-app overflow-y-auto no-scrollbar px-4 pt-10 pb-8">
+      <ScreenHeader title="Need vs Want · Live" onBack={back} />
+      <p className="text-sm text-muted-foreground -mt-2 mb-4">AI scores every transaction in real time using GPS, merchant data, and your bucket health.</p>
+
+      <div className="card-elevated rounded-2xl p-4">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Scoring Inputs</p>
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex items-center gap-2"><MapPin size={14} color="#22D3EE" /> GPS merchant</div>
+          <div className="flex items-center gap-2"><QrCode size={14} color="#EC4899" /> QR / URL scan</div>
+          <div className="flex items-center gap-2"><ListChecks size={14} color="#A78BFA" /> Bucket state</div>
+          <div className="flex items-center gap-2"><AlertTriangle size={14} color="#FBBF24" /> Debt due dates</div>
+        </div>
+      </div>
+
+      <div className="space-y-2.5 mt-3">
+        {cases.map((x) => {
+          const tone = x.verdict === "ALLOW" ? "#34D399" : x.verdict === "WARN" ? "#FBBF24" : "#F87171";
+          return (
+            <div key={x.n} className="card-elevated rounded-2xl p-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${x.c}22`, color: x.c }}><x.i size={18} /></div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold">{x.n}</p>
+                  <p className="text-[11px] text-muted-foreground">{x.cat}</p>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-1 rounded-md" style={{ background: `${tone}22`, color: tone }}>{x.verdict}</span>
+              </div>
+              <div className="flex items-center gap-2 mt-3">
+                <div className="flex-1"><ProgressBar value={x.score * 100} color={tone} /></div>
+                <span className="text-[11px] font-bold tabular-nums" style={{ color: tone }}>{x.score.toFixed(2)}</span>
+              </div>
+              <p className="text-[11px] text-muted-foreground mt-2">{x.reason}</p>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* WIDGET PREVIEW */
+export function Widget() {
+  const { back } = usePrototype();
+  return (
+    <div className="h-full bg-app overflow-y-auto no-scrollbar px-4 pt-10 pb-8">
+      <ScreenHeader title="Home Screen Widget" onBack={back} />
+      <p className="text-sm text-muted-foreground -mt-2 mb-4">Always-visible Guardian status — pin to your iPhone home screen.</p>
+
+      {/* mock iOS home backdrop */}
+      <div className="rounded-3xl p-5"
+        style={{ background: "linear-gradient(180deg, #2D1B4E 0%, #4F2974 50%, #1A1233 100%)", minHeight: 420 }}>
+        <p className="text-center text-white text-[10px] opacity-70 font-semibold tracking-widest mb-4">SUNDAY · 10 NOV</p>
+        <p className="text-center text-white font-display text-[44px] leading-none">9:41</p>
+
+        {/* widget */}
+        <div className="mt-6 rounded-2xl p-4 shadow-2xl"
+          style={{ background: "linear-gradient(135deg, #15152A, #2A1145)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5"><GxLogo size={18} /><span className="text-[10px] font-bold tracking-wider text-white/80">AUTOPILOT</span></div>
+            <ShieldIcon size={14} color="#22D3EE" />
+          </div>
+          <p className="text-[10px] text-white/60 mt-3">Safe-to-Spend today</p>
+          <p className="font-display text-[28px] text-white leading-tight">RM 42.00</p>
+          <div className="mt-2"><ProgressBar value={HEALTH_SCORE} color="#22D3EE" /></div>
+          <div className="grid grid-cols-2 gap-2 mt-3">
+            <div className="rounded-lg p-2" style={{ background: "rgba(248,113,113,0.15)" }}>
+              <p className="text-[9px] text-white/60">Next debt</p>
+              <p className="text-[11px] font-bold text-white">Atome · TODAY</p>
+            </div>
+            <div className="rounded-lg p-2" style={{ background: "rgba(52,211,153,0.15)" }}>
+              <p className="text-[9px] text-white/60">Health</p>
+              <p className="text-[11px] font-bold text-white">{HEALTH_SCORE}/100 ✓</p>
+            </div>
+          </div>
+        </div>
+
+        {/* small widgets row */}
+        <div className="grid grid-cols-2 gap-3 mt-3">
+          <div className="rounded-2xl p-3 aspect-square" style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(10px)" }}>
+            <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Streak</p>
+            <p className="font-display text-2xl text-white mt-2">🔥 13</p>
+            <p className="text-[10px] text-white/70 mt-auto">days saving</p>
+          </div>
+          <div className="rounded-2xl p-3 aspect-square" style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(10px)" }}>
+            <p className="text-[9px] text-white/60 font-bold uppercase tracking-wider">Japan</p>
+            <p className="font-display text-2xl text-white mt-2">70%</p>
+            <p className="text-[10px] text-white/70 mt-auto">RM 4,200/6,000</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4"><Button>Add Widget to Home Screen</Button></div>
     </div>
   );
 }
