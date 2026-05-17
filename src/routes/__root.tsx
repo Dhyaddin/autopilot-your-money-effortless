@@ -72,16 +72,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Smart Guard AI" },
-      { name: "description", content: "AutoPilot is an AI-powered mobile app for Malaysian youth to effortlessly manage finances and build saving habits." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Smart Guard AI" },
-      { property: "og:description", content: "AutoPilot is an AI-powered mobile app for Malaysian youth to effortlessly manage finances and build saving habits." },
+      { title: "SmartGuard AI" },
+      { name: "description", content: "AI-powered banking guardrail that blocks impulse spending in real time for Malaysian Gen-Z." },
+      { name: "author", content: "SmartGuard AI" },
+      { property: "og:site_name", content: "SmartGuard AI" },
+      { property: "og:title", content: "SmartGuard AI" },
+      { property: "og:description", content: "AI-powered banking guardrail that blocks impulse spending in real time for Malaysian Gen-Z." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Smart Guard AI" },
-      { name: "twitter:description", content: "AutoPilot is an AI-powered mobile app for Malaysian youth to effortlessly manage finances and build saving habits." },
+      { property: "og:url", content: "https://smart-guard-upm.lovable.app/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "SmartGuard AI" },
+      { name: "twitter:description", content: "AI-powered banking guardrail that blocks impulse spending in real time for Malaysian Gen-Z." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e922c7de-c52c-46dc-9b26-5b8c68aecd2d/id-preview-f59613c2--e3ea0339-15f6-4615-99e6-abab99cf6a09.lovable.app-1778417362674.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e922c7de-c52c-46dc-9b26-5b8c68aecd2d/id-preview-f59613c2--e3ea0339-15f6-4615-99e6-abab99cf6a09.lovable.app-1778417362674.png" },
     ],
@@ -89,6 +90,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "SmartGuard AI",
+          url: "https://smart-guard-upm.lovable.app/",
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "SmartGuard AI",
+          url: "https://smart-guard-upm.lovable.app/",
+          logo: "https://smart-guard-upm.lovable.app/favicon.ico",
+        }),
       },
     ],
   }),
@@ -117,7 +139,9 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </QueryClientProvider>
   );
 }

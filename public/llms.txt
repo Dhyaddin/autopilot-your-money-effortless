@@ -1,0 +1,9 @@
+# SmartGuard AI
+
+> AI-powered banking guardrail for Malaysian Gen-Z. Scores transactions Need vs. Want in real time and hard-blocks impulse spending before it hits the payment gateway.
+
+SmartGuard AI is a high-fidelity mobile prototype of an Active Spending Enforcement layer for digital banks. It combines GPS, MCC codes, DuitNow QR, and cart-link parsing with a Vertex AI Gemini 2.5 Flash + XGBoost decision engine to prevent BNPL debt traps.
+
+## Pages
+
+- [Home](/): Interactive 33-screen SmartGuard AI mobile prototype.
