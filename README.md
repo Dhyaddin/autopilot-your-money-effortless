@@ -70,8 +70,8 @@ Requires Bun ≥ 1.0 (or swap for `npm` / `pnpm`).
 
 | Member | Role | Claimed Skills |
 |---|---|---|
-| **Member 1** | Builder / Developer | Frontend Development (React / TypeScript) · UI/UX Design (Mobile Fintech) · Product Architecture & System Design |
-| **Member 2** | Presenter / Ideator | Product Ideation & Innovation · Pitching & Public Speaking · Market Research & Business Strategy |
+| **Muhammad Dhiyauddin** | Builder / Developer | Frontend Development (React / TypeScript) · UI/UX Design (Mobile Fintech) · Product Architecture & System Design |
+| **Adam Safwan** | Presenter / Ideator | Product Ideation & Innovation · Pitching & Public Speaking · Market Research & Business Strategy |
 
 ## Documentation
 
