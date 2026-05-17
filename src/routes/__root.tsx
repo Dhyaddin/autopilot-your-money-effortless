@@ -84,8 +84,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "SmartGuard AI" },
       { name: "twitter:description", content: "AI-powered banking guardrail that blocks impulse spending in real time for Malaysian Gen-Z." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e922c7de-c52c-46dc-9b26-5b8c68aecd2d/id-preview-f59613c2--e3ea0339-15f6-4615-99e6-abab99cf6a09.lovable.app-1778417362674.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e922c7de-c52c-46dc-9b26-5b8c68aecd2d/id-preview-f59613c2--e3ea0339-15f6-4615-99e6-abab99cf6a09.lovable.app-1778417362674.png" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b0bdcd8-79fd-483b-a20b-7edbfc67a5af" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b0bdcd8-79fd-483b-a20b-7edbfc67a5af" },
     ],
     links: [
       {
