@@ -72,6 +72,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "vL2CmeqY9JhA3O0tqSWybANDXPln4vT-k1FsRuQsjMw" },
       { title: "SmartGuard AI" },
       { name: "description", content: "AI-powered banking guardrail that blocks impulse spending in real time for Malaysian Gen-Z." },
       { name: "author", content: "SmartGuard AI" },
@@ -97,19 +98,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "SmartGuard AI",
-          url: "https://smart-guard-upm.lovable.app/",
-        }),
-      },
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "SmartGuard AI",
-          url: "https://smart-guard-upm.lovable.app/",
-          logo: "https://smart-guard-upm.lovable.app/favicon.ico",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              name: "SmartGuard AI",
+              url: "https://smart-guard-upm.lovable.app/",
+            },
+            {
+              "@type": "Organization",
+              name: "SmartGuard AI",
+              url: "https://smart-guard-upm.lovable.app/",
+              logo: "https://smart-guard-upm.lovable.app/favicon.ico",
+            },
+          ],
         }),
       },
     ],
